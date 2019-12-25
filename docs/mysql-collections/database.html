@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>数据库结构</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+  </head>
+  <body>
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position:fixed;left:10px;top:10px;z-index:100">
+      <div class="toast-header"><img src="..." class="rounded mr-2" alt="..." /><strong id="sqlTitle" class="mr-auto"></strong><small class="text-muted"></small><button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+      <div id="sqlData" class="toast-body"></div>
+    </div>
+    <div class="p-2">
+      <div class="accordion" id="accordionExample">
+        <div class="card" style="overflow:visible">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="cursor:pointer"><svg class="bi bi-x-octagon-fill error" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M13.46 2.146A.5.5 0 0013.107 2H6.893a.5.5 0 00-.353.146L2.146 6.54A.5.5 0 002 6.893v6.214a.5.5 0 00.146.353l4.394 4.394a.5.5 0 00.353.146h6.214a.5.5 0 00.353-.146l4.394-4.394a.5.5 0 00.146-.353V6.893a.5.5 0 00-.146-.353L13.46 2.146zm-6.106 4.5L10 9.293l2.646-2.647a.5.5 0 01.708.708L10.707 10l2.647 2.646a.5.5 0 01-.708.708L10 10.707l-2.646 2.647a.5.5 0 01-.708-.708L9.293 10 6.646 7.354a.5.5 0 11.708-.708z" clip-rule="evenodd"></path>
+              </svg>0 error,<svg class="bi bi-alert-octagon-fill" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M13.107 2a.5.5 0 01.353.146l4.394 4.394a.5.5 0 01.146.353v6.214a.5.5 0 01-.146.353l-4.394 4.394a.5.5 0 01-.353.146H6.893a.5.5 0 01-.353-.146L2.146 13.46A.5.5 0 012 13.107V6.893a.5.5 0 01.146-.353L6.54 2.146A.5.5 0 016.893 2h6.214zM9.002 13a1 1 0 112 0 1 1 0 01-2 0zM10 6a.905.905 0 00-.9.995l.35 3.507a.553.553 0 001.1 0l.35-3.507A.905.905 0 0010 6z" clip-rule="evenodd"></path>
+              </svg>0 warning,</h5>
+          </div>
+          <div class="position-relative">
+            <div id="collapseOne" class="collapse p-2 border border-top-0 position-absolute bg-light" aria-labelledby="headingOne" data-parent="#accordionExample" style="width:100%;z-index:99">
+              <div class="alert alert-success" role="alert">好耶，没有发现问题！</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-2 d-flex flex-row">
+      <div class="text-right text-truncate mr-1" style="max-width:10em">
+        <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-audit" role="tab" aria-controls="tbl-audit" id="audit-tab" class="nav-link active" name="audit" aria-selected="true">审计日志表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-organization" role="tab" aria-controls="tbl-organization" id="organization-tab" class="nav-link" name="organization" aria-selected="false">组织表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-organization_department" role="tab" aria-controls="tbl-organization_department" id="organization_department-tab" class="nav-link" name="organization_department" aria-selected="false">组织下部门表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-organization_department_permission" role="tab" aria-controls="tbl-organization_department_permission" id="organization_department_permission-tab" class="nav-link" name="organization_department_permission" aria-selected="false">部门组权限表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-permissions_cache" role="tab" aria-controls="tbl-permissions_cache" id="permissions_cache-tab" class="nav-link" name="permissions_cache" aria-selected="false">权限名称缓存</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-super_admin" role="tab" aria-controls="tbl-super_admin" id="super_admin-tab" class="nav-link" name="super_admin" aria-selected="false">管理员表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-user" role="tab" aria-controls="tbl-user" id="user-tab" class="nav-link" name="user" aria-selected="false">一般用户表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-user_permission" role="tab" aria-controls="tbl-user_permission" id="user_permission-tab" class="nav-link" name="user_permission" aria-selected="false">用户权限表</a></li>
+          <li class="nav-item"><a data-toggle="pill" href="#tbl-user_session_storage" role="tab" aria-controls="tbl-user_session_storage" id="user_session_storage-tab" class="nav-link" name="user_session_storage" aria-selected="false">session数据</a></li>
+        </ul>
+      </div>
+      <div class="flex-fill tab-content">
+        <div id="tbl-audit" role="tabpanel" aria-labelledby="audit-tab" class="tab-pane active">
+          <div class="card">
+            <h5 class="card-header">审计日志表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>audit</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 16:46:43 GMT+0800 (China Standard Time)">2019/12/25 16:46:43</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~1</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>16384</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>2</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>source</td>
+                      <td>用户或管理员ID</td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>source_table</td>
+                      <td>用户或管理员类型</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(32)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>operation</td>
+                      <td>操作类型</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(32)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>5</th>
+                      <td>target</td>
+                      <td>目标ID</td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>6</th>
+                      <td>target_table</td>
+                      <td>目标类型</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(32)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>7</th>
+                      <td>prev_value</td>
+                      <td>老值</td>
+                      <td>utf8mb4</td>
+                      <td>LONGTEXT</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>8</th>
+                      <td>value</td>
+                      <td>新值</td>
+                      <td>utf8mb4</td>
+                      <td>LONGTEXT</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>9</th>
+                      <td>extra</td>
+                      <td>额外信息</td>
+                      <td>utf8mb4</td>
+                      <td>TEXT</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>10</th>
+                      <td>ip</td>
+                      <td>操作者IP</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(45)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>11</th>
+                      <td>create_time</td>
+                      <td>操作时间</td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td>自增主键</td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-organization" role="tabpanel" aria-labelledby="organization-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">组织表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>organization</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 14:48:50 GMT+0800 (China Standard Time)">2019/12/25 14:48:50</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>1</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>display_name</td>
+                      <td>公司名称</td>
+                      <td>utf8mb4</td>
+                      <td>TEXT</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>is_delete</td>
+                      <td>是否已删除</td>
+                      <td></td>
+                      <td>TINYINT(1) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-organization_department" role="tabpanel" aria-labelledby="organization_department-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">组织下部门表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>organization_department</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 14:49:59 GMT+0800 (China Standard Time)">2019/12/25 14:49:59</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>1</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>parent_id</td>
+                      <td>父级部门（顶级为0）</td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>organization_id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑MUL</span></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>display_name</td>
+                      <td>部门名称</td>
+                      <td>utf8mb4</td>
+                      <td>TEXT</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>5</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>6</th>
+                      <td>is_delete</td>
+                      <td>是否删除</td>
+                      <td></td>
+                      <td>TINYINT(1) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                    <tr>
+                      <td>organization_department_organization_id_index</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">organization_id</span></td>
+                      <td>BTREE</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-organization_department_permission" role="tabpanel" aria-labelledby="organization_department_permission-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">部门组权限表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>organization_department_permission</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 14:57:43 GMT+0800 (China Standard Time)">2019/12/25 14:57:43</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>1</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>organization_department_id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>permission</td>
+                      <td>权限GUID</td>
+                      <td>utf8mb4</td>
+                      <td>CHAR(36)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-permissions_cache" role="tabpanel" aria-labelledby="permissions_cache-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">权限名称缓存</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>permissions_cache</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 14:46:55 GMT+0800 (China Standard Time)">2019/12/25 14:46:55</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>1</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>guid</td>
+                      <td>权限GUID</td>
+                      <td>utf8mb4</td>
+                      <td>CHAR(36)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>title</td>
+                      <td>集合(组)名称</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(255)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-super_admin" role="tabpanel" aria-labelledby="super_admin-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">管理员表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>super_admin</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Tue Dec 24 2019 20:27:29 GMT+0800 (China Standard Time)">2019/12/24 20:27:29</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>1</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>email</td>
+                      <td>登录邮箱</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(128)</td>
+                      <td><span class="badge badge-primary">🔑UNI</span></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>password</td>
+                      <td>密码</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(255)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>display_name</td>
+                      <td>昵称</td>
+                      <td>utf8mb4</td>
+                      <td>MEDIUMTEXT</td>
+                      <td><span class="badge badge-danger">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>5</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>6</th>
+                      <td>update_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span><span class="badge badge-light">更新时间</span></td>
+                    </tr>
+                    <tr>
+                      <th>7</th>
+                      <td>is_delete</td>
+                      <td>已删除</td>
+                      <td></td>
+                      <td>TINYINT(1) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                    <tr>
+                      <td>super_user_email_uindex</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">email</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-user" role="tabpanel" aria-labelledby="user-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">一般用户表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>user</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Tue Dec 24 2019 20:27:47 GMT+0800 (China Standard Time)">2019/12/24 20:27:47</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>2</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>username</td>
+                      <td>登录名</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(64)</td>
+                      <td><span class="badge badge-primary">🔑UNI</span></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>password</td>
+                      <td>密码</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(255)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>organization_id</td>
+                      <td>所属组织</td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>5</th>
+                      <td>display_name</td>
+                      <td>昵称</td>
+                      <td>utf8mb4</td>
+                      <td>TEXT</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>6</th>
+                      <td>is_disable</td>
+                      <td>账户已禁用</td>
+                      <td></td>
+                      <td>TINYINT(1) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>7</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>8</th>
+                      <td>update_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span><span class="badge badge-light">更新时间</span></td>
+                    </tr>
+                    <tr>
+                      <th>9</th>
+                      <td>is_delete</td>
+                      <td>已删除</td>
+                      <td></td>
+                      <td>TINYINT(1) UNSIGNED</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                    <tr>
+                      <td>user_username_uindex</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">username</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-user_permission" role="tabpanel" aria-labelledby="user_permission-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">用户权限表</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>user_permission</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 14:57:25 GMT+0800 (China Standard Time)">2019/12/25 14:57:25</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td>1</td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>user_id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑MUL</span></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>permission</td>
+                      <td>权限GUID</td>
+                      <td>utf8mb4</td>
+                      <td>CHAR(36)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>create_at</td>
+                      <td></td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">id</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                    <tr>
+                      <td>user_permset_user_id_index</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">user_id</span></td>
+                      <td>BTREE</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tbl-user_session_storage" role="tabpanel" aria-labelledby="user_session_storage-tab" class="tab-pane">
+          <div class="card">
+            <h5 class="card-header">session数据</h5>
+            <div class="card-body">
+              <h5 class="card-title d-flex"><span class="flex-fill">信息</span><span class="small text-muted">截止到<span title="Wed Dec 25 2019 17:37:41 GMT+0800 (China Standard Time)">2019/12/25 17:37:41</span></span></h5>
+              <div class="card-text">
+                <table class="table">
+                  <tr>
+                    <th class="text-right">表名：</th>
+                    <td>user_session_storage</td>
+                    <th class="text-right">创建于：</th>
+                    <td><span title="Wed Dec 25 2019 14:51:06 GMT+0800 (China Standard Time)">2019/12/25 14:51:06</span></td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">存取引擎：</th>
+                    <td>InnoDB</td>
+                    <th class="text-right">上次修改：</th>
+                    <td>从不</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">字符集：</th>
+                    <td>utf8mb4_unicode_ci</td>
+                    <th class="text-right">行数：</th>
+                    <td>~0</td>
+                  </tr>
+                  <tr>
+                    <th class="text-right">平均行长度：</th>
+                    <td>0</td>
+                    <th class="text-right">当前自增值：</th>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+              <h5 class="card-title">字段列表</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名称</th>
+                      <th>备注</th>
+                      <th>字符集</th>
+                      <th>类型</th>
+                      <th>其他</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>hash</td>
+                      <td>会话ID</td>
+                      <td>utf8mb4</td>
+                      <td>CHAR(32)</td>
+                      <td><span class="badge badge-primary">🔑PRI</span></td>
+                    </tr>
+                    <tr>
+                      <th>2</th>
+                      <td>user_id</td>
+                      <td></td>
+                      <td></td>
+                      <td>INT(10) UNSIGNED</td>
+                      <td><span class="badge badge-primary">🔑MUL</span></td>
+                    </tr>
+                    <tr>
+                      <th>3</th>
+                      <td>title</td>
+                      <td>会话名称</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(255)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>4</th>
+                      <td>expire_at</td>
+                      <td>超时时间</td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>5</th>
+                      <td>last_active_at</td>
+                      <td>最后活动时间</td>
+                      <td></td>
+                      <td>DATETIME</td>
+                      <td><span class="badge badge-success">默认值</span></td>
+                    </tr>
+                    <tr>
+                      <th>6</th>
+                      <td>ip</td>
+                      <td>登录ip</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(45)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>7</th>
+                      <td>last_active_ip</td>
+                      <td>最后活动IP</td>
+                      <td>utf8mb4</td>
+                      <td>VARCHAR(45)</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>8</th>
+                      <td>value</td>
+                      <td>会话内容（JSON）</td>
+                      <td>utf8mb4</td>
+                      <td>LONGTEXT</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <h5 class="card-title">索引</h5>
+              <div class="card-text">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>注释</th>
+                      <th>字段</th>
+                      <th>类型</th>
+                      <th>唯一</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>PRIMARY</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">hash</span></td>
+                      <td>BTREE</td>
+                      <td>✔</td>
+                    </tr>
+                    <tr>
+                      <td>owner_id</td>
+                      <td></td>
+                      <td><span class="badge badge-primary">user_id</span></td>
+                      <td>BTREE</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><textarea id="output" style="opacity:0;position:fixed;top:0;z-index:-1"></textarea>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    (function initScript() {
+      function copy(message, sql) {
+        $('#output')
+          .text(sql)
+          .focus()[0]
+          .select();
+        const msg = document.execCommand('copy');
+        console.log('Copying text command was ' + msg);
+        $('#sqlTitle').text(msg ? '复制成功' : '复制失败');
+        $('#sqlData').text(message);
+        $('#toast')
+          .toast({
+            delay: 10000
+          })
+          .toast('show');
+      }
+      $(document).on('click', '#copyAll', function() {
+        const data = Array.from($('.copyCode').map(function() {
+          return $(this).text();
+        }));
+        copy(`复制了${data.length}条语句`, data.join('\n'));
+      });
+      $(document).on('dblclick', '.copyCode', function() {
+        const sql = $(this)
+          .text()
+          .trim();
+        copy(sql, sql);
+      });
+    })();
+  </script>
+</html>

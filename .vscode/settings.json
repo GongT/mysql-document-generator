@@ -1,0 +1,15 @@
+{
+	"search.exclude": {
+		"**/jspm_packages": true,
+		"**/pnpm-store": true
+	},
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"javascript.implicitProjectConfig.checkJs": true,
+	"javascript.implicitProjectConfig.experimentalDecorators": true,
+	"javascript.preferences.importModuleSpecifier": "relative",
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"cSpell.ignoreWords": [
+		"setenv"
+	]
+}

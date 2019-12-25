@@ -1,0 +1,23 @@
+{
+	"extends": "../node_modules/@idlebox/single-dog-asset/package/tsconfig.json",
+	"compilerOptions": {
+		"module": "commonjs",
+		"outDir": "../lib/cjs",
+		"noEmitOnError": false,
+		"rootDir": ".",
+		"typeRoots": [
+			"../node_modules/@types"
+		],
+		"declaration": false,
+		"declarationMap": false,
+		"lib": [
+			"ESNext",
+			"DOM"
+		],
+		"jsx": "react"
+	},
+	"files": [
+		"api.ts",
+		"bin.ts"
+	]
+}
