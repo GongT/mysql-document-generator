@@ -2,9 +2,17 @@ import * as React from 'react';
 import { DiagnosisList } from './element/diagnosisList';
 import { ITable, ITableColumn, ITableKey } from '../fetch/type';
 
-function LinkTo(props: React.PropsWithChildren<{ name: string; [id: string]: any }>) {
+function LinkTo(props: React.PropsWithChildren<{ comment: string; name: string; [id: string]: any }>) {
 	return (
-		<a data-toggle="pill" href={'#tbl-' + props.name} role="tab" aria-controls={'tbl-' + props.name} {...props}>
+		<a
+			data-toggle="pill"
+			data-name={props.name}
+			data-title={props.comment}
+			href={'#tbl-' + props.name}
+			role="tab"
+			aria-controls={'tbl-' + props.name}
+			{...props}
+		>
 			{props.children}
 		</a>
 	);
@@ -14,6 +22,7 @@ function link(table: ITable, index: number) {
 	return (
 		<li key={table.name} className="nav-item">
 			<LinkTo
+				comment={table.comment}
 				id={table.name + '-tab'}
 				className={`nav-link${index === 0 ? ' active' : ''}`}
 				name={table.name}
@@ -123,7 +132,21 @@ function createFieldList(col: ITableColumn) {
 	return (
 		<tr key={col.name}>
 			<th>{col.order}</th>
-			<td>{col.name}</td>
+			<td>
+				{col.name.endsWith('_id') ? (
+					<span
+						className="badge badge-light"
+						style={{
+							fontSize: '100%',
+							fontWeight: 'normal',
+						}}
+					>
+						🔗{col.name.replace(/_id$/, '')}
+					</span>
+				) : (
+					col.name
+				)}
+			</td>
 			<td>{col.comment}</td>
 			<td>{col.charset}</td>
 			<td>{col.type}</td>
@@ -149,18 +172,43 @@ function createKeyList(key: ITableKey) {
 					</span>
 				))}
 			</td>
-			<td>{key.type}</td>
+			<td>{parseType(key.type)}</td>
 			<td>{key.unique ? '✔' : ''}</td>
 		</tr>
 	);
+}
+
+const isInt = /INT\(\d+\)/;
+
+function parseType(t: string) {
+	if (isInt.test(t)) {
+		return t.replace(/\(\d+\)/, '');
+	}
+	return t;
+}
+
+declare const $: any;
+function findingCurrent() {
+	if (location.hash.startsWith('#')) {
+		const id = location.hash.replace(/^#/, '');
+		console.log('switch page', id);
+		$('#' + id + '-tab').click();
+	}
+
+	$(document).on('shown.bs.tab', (event: MouseEvent) => {
+		console.log(event.target);
+		const name = $(event.target).data('name');
+		location.hash = name;
+	});
 }
 
 export function createDocument(tables: ITable[]): React.ReactElement {
 	return (
 		<React.Fragment>
 			<DiagnosisList />
+			<script dangerouslySetInnerHTML={{ __html: '$(' + findingCurrent.toString() + ');' }}></script>
 			<div className="p-2 d-flex flex-row">
-				<div className="text-right text-truncate mr-1" style={{ maxWidth: '10em' }}>
+				<div className="text-right text-truncate mr-1" style={{ minWidth: '10em', maxWidth: '20em' }}>
 					<ul className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 						{tables.map(link)}
 					</ul>
