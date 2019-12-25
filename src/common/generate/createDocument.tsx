@@ -1,6 +1,6 @@
-import { ITable, ITableColumn, ITableKey } from './../fetch/type';
 import * as React from 'react';
 import { DiagnosisList } from './element/diagnosisList';
+import { ITable, ITableColumn, ITableKey } from '../fetch/type';
 
 function LinkTo(props: React.PropsWithChildren<{ name: string; [id: string]: any }>) {
 	return (

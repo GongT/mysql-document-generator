@@ -1,7 +1,7 @@
-import { NormalError } from '../library/normalError';
-import { createConnection, ConnectionConfig, Connection } from 'mysql';
-import { promisify, inspect } from 'util';
 import { info } from 'fancy-log';
+import { Connection, ConnectionConfig, createConnection } from 'mysql';
+import { inspect, promisify } from 'util';
+import { NormalError } from '../library/normalError';
 
 interface PromiseQueryFunction {
 	(sql: string, args?: any[]): Promise<any[]>;

@@ -7,6 +7,7 @@ import { createDict } from './createDict';
 import { createDocument } from './createDocument';
 import { htmlPage } from './htmlPageHeader';
 import { ITable } from '../fetch/type';
+
 import pretty = require('pretty');
 
 const writeFile = promisify(writeFileAsync);

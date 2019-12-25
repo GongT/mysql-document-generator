@@ -1,15 +1,15 @@
+import { diagnosisColumn } from './diagnosisColumn';
+import { diagnosisLink } from './diagnosisLink';
+import { diagnosisTable } from './diagnosisTable';
 import {
-	ITable,
-	ITableColumn,
 	IInformationSchemaColumnsRow,
 	IInformationSchemaTablesRow,
-	ITableKey,
 	IShowIndexesRow,
+	ITable,
+	ITableColumn,
+	ITableKey,
 } from './type';
-import { queryInformationSchema, queryApplicationSchema } from '../mysql/connection';
-import { diagnosisLink } from './diagnosisLink';
-import { diagnosisColumn } from './diagnosisColumn';
-import { diagnosisTable } from './diagnosisTable';
+import { queryApplicationSchema, queryInformationSchema } from '../mysql/connection';
 
 async function createTableMap(dbName: string): Promise<ITable[]> {
 	const result: IInformationSchemaTablesRow[] = await queryInformationSchema(

@@ -1,8 +1,8 @@
-import { IInformationSchemaColumnsRow as IInformationSchemaColumnsRowBase } from './type';
-import { addDiagnosis } from '../library/diagnosis';
 import { format } from 'util';
+import { IInformationSchemaColumnsRow } from './type';
+import { addDiagnosis } from '../library/diagnosis';
 
-export interface IInformationSchemaColumnsRow extends IInformationSchemaColumnsRowBase {
+export interface IInformationSchemaColumnsRowRaw extends IInformationSchemaColumnsRow {
 	TABLE_CATALOG: 'def';
 	TABLE_SCHEMA: string;
 	DATA_TYPE: string;
@@ -21,7 +21,7 @@ const sizeLint: { [id: string]: number } = {
 	BIGINT: 19,
 };
 
-export function diagnosisColumn(colInfo: IInformationSchemaColumnsRow) {
+export function diagnosisColumn(colInfo: IInformationSchemaColumnsRowRaw) {
 	const title = `表“${colInfo.TABLE_NAME}”中的字段“${colInfo.COLUMN_NAME}”`;
 
 	if (/[A-Z]/.test(colInfo.COLUMN_NAME)) {
@@ -99,11 +99,11 @@ export function diagnosisColumn(colInfo: IInformationSchemaColumnsRow) {
 	}
 }
 
-function correctCreatePrimary(colInfo: IInformationSchemaColumnsRow) {
+function correctCreatePrimary(colInfo: IInformationSchemaColumnsRowRaw) {
 	return format('ALTER TABLE `%s` ADD PRIMARY KEY (`id`);', colInfo.TABLE_NAME);
 }
 
-function correctBoolField(colInfo: IInformationSchemaColumnsRow, name: string) {
+function correctBoolField(colInfo: IInformationSchemaColumnsRowRaw, name: string) {
 	if (!name.startsWith('is_')) name = 'is_' + name.replace(/^_/, '');
 
 	return format(
@@ -114,7 +114,7 @@ function correctBoolField(colInfo: IInformationSchemaColumnsRow, name: string) {
 		colInfo.COLUMN_COMMENT ? JSON.stringify(colInfo.COLUMN_COMMENT) : '"是否？？？"'
 	);
 }
-function correctIdField(colInfo: IInformationSchemaColumnsRow, name: string) {
+function correctIdField(colInfo: IInformationSchemaColumnsRowRaw, name: string) {
 	return format(
 		'ALTER TABLE `%s` CHANGE `%s` `%s` INT UNSIGNED NOT NULL%s%s;',
 		colInfo.TABLE_NAME,
@@ -124,7 +124,7 @@ function correctIdField(colInfo: IInformationSchemaColumnsRow, name: string) {
 		colInfo.COLUMN_COMMENT ? ' COMMENT ' + JSON.stringify(colInfo.COLUMN_COMMENT) : ''
 	);
 }
-function correctIntField(colInfo: IInformationSchemaColumnsRow, name: string) {
+function correctIntField(colInfo: IInformationSchemaColumnsRowRaw, name: string) {
 	return format(
 		'ALTER TABLE `%s` CHANGE `%s` `%s` %s %s NOT NULL COMMENT %s;',
 		colInfo.TABLE_NAME,
@@ -135,7 +135,7 @@ function correctIntField(colInfo: IInformationSchemaColumnsRow, name: string) {
 		colInfo.COLUMN_COMMENT ? JSON.stringify(colInfo.COLUMN_COMMENT) : '"此处添加注释"'
 	);
 }
-function correctUseDateTime(colInfo: IInformationSchemaColumnsRow, name: string) {
+function correctUseDateTime(colInfo: IInformationSchemaColumnsRowRaw, name: string) {
 	let com: string = '';
 	if (colInfo.COLUMN_COMMENT) {
 		com = ' COMMENT ' + JSON.stringify(colInfo.COLUMN_COMMENT);

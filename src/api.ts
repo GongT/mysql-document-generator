@@ -1,7 +1,7 @@
-import { ITable } from './common/fetch/type';
 import { ConnectionConfig } from 'mysql';
-import { mysqlConnect, mysqlDisconnect } from './common/mysql/connection';
 import { resolveInformation } from './common/fetch/main';
+import { ITable } from './common/fetch/type';
+import { mysqlConnect, mysqlDisconnect } from './common/mysql/connection';
 
 interface WithDatabase {
 	database: string;
