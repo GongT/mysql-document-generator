@@ -80,7 +80,7 @@ async function getDefault() {
 	if (argv.length < 1) {
 		die('database name is required.');
 	} else if (argv.length > 1) {
-		die('Unknown param: ' + argv[1]);
+		die('Unknown param: ' + argv.join(', '));
 	} else if (argv[0].startsWith('-')) {
 		die('database name is required.');
 	}

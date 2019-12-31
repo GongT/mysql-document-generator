@@ -16,7 +16,7 @@ If "mysql" command is not in PATH, only these config has default:
 The [database] is required!
 
 program config:
-  -d, --dist                Folder for store output files.
+  -O, --output-dir          Folder for store output files.
 
 mysql connection config:
   -h, --host=name           Connect to host.
