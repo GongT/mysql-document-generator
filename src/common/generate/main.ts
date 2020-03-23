@@ -7,8 +7,8 @@ import { createDict } from './createDict';
 import { createDocument } from './createDocument';
 import { htmlPage } from './htmlPageHeader';
 import { ITable } from '../fetch/type';
-
-import pretty = require('pretty');
+// @ts-ignore
+import * as pretty from 'pretty';
 
 const writeFile = promisify(writeFileAsync);
 

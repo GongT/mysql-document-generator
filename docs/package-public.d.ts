@@ -1,24 +1,6 @@
 import { ConnectionConfig } from 'mysql';
 
-export declare function addDiagnosis(message: string, todo?: string, isWarn?: boolean): void;
-
-export declare function diagnosisColumn(colInfo: IInformationSchemaColumnsRowRaw): void;
-
-export declare function diagnosisLink(tables: ITable[]): void;
-
-export declare function diagnosisMessage(): {
-    warns: number;
-    errors: number;
-};
-
-export declare function diagnosisTable(table: ITable): void;
-
-export declare function getAllDiagnosis(): {
-    message: string;
-    isWarn: boolean;
-    todo: string;
-}[];
-
+/** @extern */
 export declare interface IInformationSchemaColumnsRow {
     TABLE_NAME: string;
     COLUMN_NAME: string;
@@ -32,18 +14,7 @@ export declare interface IInformationSchemaColumnsRow {
     COLUMN_COMMENT: string;
 }
 
-export declare interface IInformationSchemaColumnsRowRaw extends IInformationSchemaColumnsRow {
-    TABLE_CATALOG: 'def';
-    TABLE_SCHEMA: string;
-    DATA_TYPE: string;
-    CHARACTER_MAXIMUM_LENGTH: number;
-    CHARACTER_OCTET_LENGTH: number;
-    NUMERIC_PRECISION: number;
-    NUMERIC_SCALE: number;
-    DATETIME_PRECISION: number;
-    COLLATION_NAME: number;
-}
-
+/** @extern */
 export declare interface IInformationSchemaTablesRow {
     TABLE_SCHEMA: string;
     TABLE_NAME: string;
@@ -57,6 +28,7 @@ export declare interface IInformationSchemaTablesRow {
     TABLE_COMMENT: string;
 }
 
+/** @extern */
 export declare interface IShowIndexesRow {
     Non_unique: number;
     Key_name: string;
@@ -66,6 +38,7 @@ export declare interface IShowIndexesRow {
     Index_comment: string;
 }
 
+/** @extern */
 export declare interface ITable {
     name: string;
     comment: string;
@@ -80,6 +53,7 @@ export declare interface ITable {
     keys: ITableKey[];
 }
 
+/** @extern */
 export declare interface ITableColumn {
     name: string;
     comment: string;
@@ -91,6 +65,7 @@ export declare interface ITableColumn {
     onUpdateCurrentTimestamp: boolean;
 }
 
+/** @extern */
 export declare interface ITableKey {
     name: string;
     comment?: string;
@@ -99,25 +74,10 @@ export declare interface ITableKey {
     type: string;
 }
 
-export declare function mysqlConnect(database: string, config: Omit<ConnectionConfig, 'database' | 'charset'>): Promise<void>;
-
-export declare function mysqlDisconnect(): Promise<void>;
-
-export declare class NormalError extends Error {
-}
-
-declare interface PromiseQueryFunction {
-    (sql: string, args?: any[]): Promise<any[]>;
-}
-
-export declare let queryApplicationSchema: PromiseQueryFunction;
-
-export declare let queryInformationSchema: PromiseQueryFunction;
-
+/** @extern */
 export declare function resolveDatabase(connection: Omit<ConnectionConfig, 'database' | 'charset'> & WithDatabase): Promise<ITable[]>;
 
-export declare function resolveInformation(dbName: string): Promise<ITable[]>;
-
+/** @extern */
 declare interface WithDatabase {
     database: string;
 }

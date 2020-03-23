@@ -1,3 +1,4 @@
+/** @extern */
 export interface IInformationSchemaColumnsRow {
 	// TABLE_CATALOG: 'def';
 	// TABLE_SCHEMA: string;
@@ -19,6 +20,7 @@ export interface IInformationSchemaColumnsRow {
 	EXTRA: string;
 	COLUMN_COMMENT: string;
 }
+/** @extern */
 export interface IInformationSchemaTablesRow {
 	// TABLE_CATALOG: string;
 	TABLE_SCHEMA: string;
@@ -44,6 +46,7 @@ export interface IInformationSchemaTablesRow {
 	// MAX_INDEX_LENGTH: number;
 	// TEMPORARY: string;
 }
+/** @extern */
 export interface IShowIndexesRow {
 	// Table: string;
 	Non_unique: number;
@@ -59,7 +62,7 @@ export interface IShowIndexesRow {
 	// Comment: string;
 	Index_comment: string;
 }
-
+/** @extern */
 export interface ITableColumn {
 	name: string;
 	comment: string;
@@ -71,7 +74,7 @@ export interface ITableColumn {
 
 	onUpdateCurrentTimestamp: boolean;
 }
-
+/** @extern */
 export interface ITableKey {
 	name: string;
 	comment?: string;
@@ -79,7 +82,7 @@ export interface ITableKey {
 	unique: boolean;
 	type: string;
 }
-
+/** @extern */
 export interface ITable {
 	name: string;
 	comment: string;

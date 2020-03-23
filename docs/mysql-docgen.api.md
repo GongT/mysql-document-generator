@@ -6,45 +6,9 @@
 
 import { ConnectionConfig } from 'mysql';
 
-// Warning: (ae-missing-release-tag) "addDiagnosis" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function addDiagnosis(message: string, todo?: string, isWarn?: boolean): void;
-
-// Warning: (ae-missing-release-tag) "diagnosisColumn" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function diagnosisColumn(colInfo: IInformationSchemaColumnsRowRaw): void;
-
-// Warning: (ae-missing-release-tag) "diagnosisLink" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function diagnosisLink(tables: ITable[]): void;
-
-// Warning: (ae-missing-release-tag) "diagnosisMessage" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function diagnosisMessage(): {
-    warns: number;
-    errors: number;
-};
-
-// Warning: (ae-missing-release-tag) "diagnosisTable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function diagnosisTable(table: ITable): void;
-
-// Warning: (ae-missing-release-tag) "getAllDiagnosis" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function getAllDiagnosis(): {
-    message: string;
-    isWarn: boolean;
-    todo: string;
-}[];
-
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IInformationSchemaColumnsRow" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export interface IInformationSchemaColumnsRow {
     // (undocumented)
@@ -69,32 +33,9 @@ export interface IInformationSchemaColumnsRow {
     TABLE_NAME: string;
 }
 
-// Warning: (ae-missing-release-tag) "IInformationSchemaColumnsRowRaw" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export interface IInformationSchemaColumnsRowRaw extends IInformationSchemaColumnsRow {
-    // (undocumented)
-    CHARACTER_MAXIMUM_LENGTH: number;
-    // (undocumented)
-    CHARACTER_OCTET_LENGTH: number;
-    // (undocumented)
-    COLLATION_NAME: number;
-    // (undocumented)
-    DATA_TYPE: string;
-    // (undocumented)
-    DATETIME_PRECISION: number;
-    // (undocumented)
-    NUMERIC_PRECISION: number;
-    // (undocumented)
-    NUMERIC_SCALE: number;
-    // (undocumented)
-    TABLE_CATALOG: 'def';
-    // (undocumented)
-    TABLE_SCHEMA: string;
-}
-
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IInformationSchemaTablesRow" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export interface IInformationSchemaTablesRow {
     // (undocumented)
@@ -119,8 +60,9 @@ export interface IInformationSchemaTablesRow {
     UPDATE_TIME: number;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "IShowIndexesRow" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export interface IShowIndexesRow {
     // (undocumented)
@@ -137,8 +79,9 @@ export interface IShowIndexesRow {
     Seq_in_index: number;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ITable" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export interface ITable {
     // (undocumented)
@@ -165,8 +108,9 @@ export interface ITable {
     update_time: number;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ITableColumn" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export interface ITableColumn {
     // (undocumented)
@@ -187,8 +131,9 @@ export interface ITableColumn {
     type: string;
 }
 
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-missing-release-tag) "ITableKey" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export interface ITableKey {
     // (undocumented)
@@ -203,43 +148,12 @@ export interface ITableKey {
     unique: boolean;
 }
 
-// Warning: (ae-missing-release-tag) "mysqlConnect" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function mysqlConnect(database: string, config: Omit<ConnectionConfig, 'database' | 'charset'>): Promise<void>;
-
-// Warning: (ae-missing-release-tag) "mysqlDisconnect" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function mysqlDisconnect(): Promise<void>;
-
-// Warning: (ae-missing-release-tag) "NormalError" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export class NormalError extends Error {
-}
-
-// Warning: (ae-forgotten-export) The symbol "PromiseQueryFunction" needs to be exported by the entry point _export_all_in_one_index.d.ts
-// Warning: (ae-missing-release-tag) "queryApplicationSchema" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export let queryApplicationSchema: PromiseQueryFunction;
-
-// Warning: (ae-missing-release-tag) "queryInformationSchema" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export let queryInformationSchema: PromiseQueryFunction;
-
+// Warning: (tsdoc-undefined-tag) The TSDoc tag "@extern" is not defined in this configuration
 // Warning: (ae-forgotten-export) The symbol "WithDatabase" needs to be exported by the entry point _export_all_in_one_index.d.ts
 // Warning: (ae-missing-release-tag) "resolveDatabase" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
+//
 // @public (undocumented)
 export function resolveDatabase(connection: Omit<ConnectionConfig, 'database' | 'charset'> & WithDatabase): Promise<ITable[]>;
-
-// Warning: (ae-missing-release-tag) "resolveInformation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
-// 
-// @public (undocumented)
-export function resolveInformation(dbName: string): Promise<ITable[]>;
 
 
 // (No @packageDocumentation comment for this package)

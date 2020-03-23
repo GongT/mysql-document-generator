@@ -66,7 +66,7 @@ async function getDefault() {
 	const ret = await argParse(mysqlcmd, flags);
 	// console.log(mysqlcmd, ret);
 	const { host, port, socket, user, password } = ret;
-	return { host, port, socket, user, password };
+	return { host, port, socketPath: socket, user, password };
 }
 
 (async () => {
