@@ -4,7 +4,4 @@ node_modules/
 *.tgz
 lib/
 docs/mysql-collections
-
-.idea
-.vscode/*
-!.vscode/*.json
+pnpm-lock.yaml

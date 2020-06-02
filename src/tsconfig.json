@@ -5,8 +5,14 @@
 		"rootDir": ".",
 		"declaration": false,
 		"declarationMap": false,
-		"lib": ["ESNext", "DOM"],
+		"lib": [
+			"ESNext",
+			"DOM"
+		],
 		"jsx": "react"
 	},
-	"files": ["bin.ts", "api.ts"]
+	"files": [
+		"bin.ts",
+		"api.ts"
+	]
 }

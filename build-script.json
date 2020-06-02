@@ -2,7 +2,7 @@
 	"load": [
 		{
 			"file": "@build-script/export-all-in-one/build-script-register",
-			"args": ["src/tsconfig.api.json"]
+			"args": ["src/tsconfig.json"]
 		}
 	],
 	"alias": {
